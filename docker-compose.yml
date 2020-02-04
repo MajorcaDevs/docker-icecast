@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+   master:
+     image: majorcadevs/icecast
+     environment: 
+        - GENERATE_TEMPLATE=True
+   relay:
+      image: majorcadevs/icecast
+      environment:
+        - GENERATE_TEMPLATE=True
+        - ENABLE_RELAY=True
+        - IC_RELAY_MASTER_SERVER=master
+        - IC_RELAY_MASTER_UPDATE_INTERVAL=30

@@ -1,0 +1,65 @@
+<icecast>
+    <location>{{IC_LOCATION}}</location>
+    <admin>{{IC_ADMIN}}</admin>
+    <limits>
+        <clients>{{IC_MAX_CLIENTS}}</clients>
+        <sources>{{IC_MAX_SOURCES}}</sources>
+        <queue-size>{{IC_QUEUE_SIZE}}</queue-size>
+        <client-timeout>{{IC_CLIENT_TIMEOUT}}</client-timeout>
+        <header-timeout>{{IC_HEADER_TIMEOUT}}</header-timeout>
+        <source-timeout>{{IC_SOURCE_TIMEOUT}}</source-timeout>
+        <burst-on-connect>1</burst-on-connect>
+        <burst-size>{{IC_BURST_SIZE}}</burst-size>
+    </limits>
+
+    <authentication>
+        <source-password>{{IC_SOURCE_PASSWORD}}</source-password>
+        <relay-password>{{IC_MASTER_RELAY_PASSWORD}}</relay-password>
+        <admin-user>{{IC_ADMIN_USER}}</admin-user>
+        <admin-password>{{IC_ADMIN_PASSWORD}}</admin-password>
+    </authentication>
+
+    <hostname>{{IC_HOSTNAME}}</hostname>
+
+    <listen-socket>
+        <port>{{IC_LISTEN_PORT}}</port>
+        <bind-address>{{IC_LISTEN_BIND_ADDRESS}}</bind-address>
+        <shoutcast-mount>/{{IC_LISTEN_MOUNT}}</shoutcast-mount>
+    </listen-socket>
+
+    <http-headers>
+        <header name="Access-Control-Allow-Origin" value="*" />
+    </http-headers>
+
+{{#ENABLE_RELAY}}
+    <master-server>{{IC_RELAY_MASTER_SERVER}}</master-server>
+    <master-server-port>{{IC_RELAY_MASTER_PORT}}</master-server-port>
+    <master-update-interval>{{IC_RELAY_MASTER_UPDATE_INTERVAL}}</master-update-interval>
+    <master-password>{{IC_RELAY_MASTER_PASSWORD}}</master-password>
+{{/ENABLE_RELAY}}
+
+    <fileserve>1</fileserve>
+
+    <paths>
+        <basedir>/usr/share/icecast</basedir>
+        <logdir>/var/log/icecast</logdir>
+        <webroot>/usr/share/icecast/web</webroot>
+        <adminroot>/usr/share/icecast/admin</adminroot>
+        <alias source="/" destination="/status.xsl"/>
+    </paths>
+
+    <logging>
+        <accesslog>access.log</accesslog>
+        <errorlog>error.log</errorlog>
+        <loglevel>{{IC_DEBUG_LOGLEVEL}}</loglevel>
+        <logsize>{{IC_LOGSIZE}}</logsize>
+    </logging>
+
+    <security>
+        <chroot>0</chroot>
+        <changeowner>
+            <user>icecast</user>
+            <group>icecast</group>
+        </changeowner>
+    </security>
+</icecast>
