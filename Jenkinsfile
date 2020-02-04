@@ -6,20 +6,12 @@ def getNodeHostname() {
   }
 }
 
-def getGitTag() {
-  echo 'trying to get git tag'
-  GIT_TAG = sh(script: 'git tag -l --contains HEAD', returnStdout: true).trim()
-  echo "detected tag : ${GIT_TAG}"
-  GIT_COMMIT_DESCRIPTION = sh(script: 'git log -n1 --pretty=format:%B', returnStdout: true).trim()
-  echo "current description : ${GIT_COMMIT_DESCRIPTION}"
-}
-
 def buildDockerImage(image, arch, tag) {
-  return docker.build("${image}:${arch}-${tag}", "--pull --build-arg ARCH=${arch} -f docker/Dockerfile .")
+  return docker.build("${image}:${arch}-${tag}", "--pull --build-arg ARCH=${arch} -f Dockerfile .")
 }
 
 def pushDockerImage(img, arch, tag) {
-  def githubImage = "docker.pkg.github.com/majorcadevs/docker-icecast-$arch:$tag"
+  def githubImage = "docker.pkg.github.com/majorcadevs/docker-icecast/icecast-$arch:$tag"
   script {
     docker.withRegistry('https://registry.hub.docker.com', 'bobthabuilda') { 
       img.push("${arch}-${tag}")  
@@ -173,30 +165,8 @@ pipeline {
         }
       }
     }
+  } 
 
-  stage ('Get Git Tag') {
-    agent { label 'majorcadevs' }
-    when { branch 'master' }
-    steps {
-      getGitTag()
-    }
-  }
-
-  stage('Upload Release to Github') {
-      agent { label 'majorcadevs' }
-      when {
-        branch 'master'
-        expression {
-          GIT_TAG != null && GIT_TAG != ''
-        }
-      }
-
-      steps {
-        uploadArtifacts()
-      }
-    }
-  }    
-    
   post {
     success {
       cleanWs()
