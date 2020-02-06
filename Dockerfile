@@ -1,8 +1,10 @@
+ARG ARCH=amd64
+
 FROM alpine AS builder
 RUN mkdir /scripts
 RUN apk add --no-cache curl && curl -sSL https://git.io/get-mo -o /scripts/mo && chmod +x /scripts/mo
 
-FROM alpine
+FROM ${ARCH}/alpine
 LABEL AUTHOR="MajorcaDevs"
 
 RUN apk add --no-cache icecast bash
